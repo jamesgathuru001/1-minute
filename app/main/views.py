@@ -254,49 +254,6 @@ def project():
         return redirect(url_for('.projects'))
     return render_template("project.html", project_form=form, title=title)
 
-
-@main.route('/user/category/music', methods=['GET', 'POST'])
-@login_required
-def music():
-    form = MusicForm()
-    title = 'Post a pitch'
-    if form.validate_on_submit():
-        post = form.post.data
-        body = form.body.data
-        new_music = Music(post=post, user=current_user, body=body)
-        new_music.save_music()
-        return redirect(url_for('.musics'))
-    return render_template("music.html", music_form=form, title=title)
-
-
-@main.route('/user/category/interview', methods=['GET', 'POST'])
-@login_required
-def interview():
-    form = InterviewForm()
-    title = 'Post a pitch'
-    if form.validate_on_submit():
-        post = form.post.data
-        body = form.body.data
-        new_interview = Interview(post=post, user=current_user, body=body)
-        new_interview.save_interview()
-        return redirect(url_for('.interviews'))
-    return render_template("interview.html", interview_form=form, title=title)
-
-
-@main.route('/user/category/seduction', methods=['GET', 'POST'])
-@login_required
-def seduction():
-    form = SeductionForm()
-    title = 'Post a pitch'
-    if form.validate_on_submit():
-        post = form.post.data
-        body = form.body.data
-        new_seduction = Seduction(post=post, user=current_user, body=body)
-        new_seduction.save_seduction()
-        return redirect(url_for('.seductions'))
-    return render_template("seduction.html", seduction_form=form, title=title)
-
-
 @main.route('/user/category/sale', methods=['GET', 'POST'])
 @login_required
 def sale():
@@ -370,53 +327,6 @@ def displayproject(id):
     review = ReviewProject.query.filter_by(project_id=id).all()
     return render_template('projectpitch.html', project=project, review_form=form, review=review)
 
-
-@main.route('/user/category/musics')
-@login_required
-def musics():
-    title = 'Music'
-    posts = Music.query.all()
-    return render_template("misc.html", posts=posts, title=title)
-
-
-@main.route('/user/music/<int:id>', methods=['POST', 'GET'])
-@login_required
-def displaymusic(id):
-    music = Music.query.get(id)
-    form = MusicReviewForm()
-    if form.validate_on_submit():
-        review = form.review.data
-        new_musicreview = ReviewMusic(
-            review=review, music_id=id, user=current_user)
-        new_musicreview.save_reviewmusic()
-
-    review = ReviewMusic.query.filter_by(music_id=id).all()
-    return render_template('musicpitch.html', music=music, review_form=form, review=review)
-
-
-@main.route('/user/category/seductions')
-@login_required
-def seductions():
-    title = 'Seduction'
-    posts = Seduction.query.all()
-    return render_template("seduct.html", posts=posts, title=title)
-
-
-@main.route('/user/seduction/<int:id>', methods=['POST', 'GET'])
-@login_required
-def displayseduction(id):
-    seduction = Seduction.query.get(id)
-    form = SeductionReviewForm()
-    if form.validate_on_submit():
-        review = form.review.data
-        new_seductionreview = ReviewSeduction(
-            review=review, seduction_id=id, user=current_user)
-        new_seductionreview.save_reviewseduction()
-
-    review = ReviewSeduction.query.filter_by(seduction_id=id).all()
-    return render_template('seductpitch.html', seduction=seduction, review_form=form, review=review)
-
-
 @main.route('/user/category/sales')
 @login_required
 def sales():
@@ -481,26 +391,3 @@ def rating():
     votes = db.session.query(func.sum(Downvote.downvote)).scalar()
     votes = str(votes)
     return votes
-
-
-@main.route('/user/category/interviews')
-@login_required
-def interviews():
-    title = 'Interview'
-    posts = Interview.query.all()
-    return render_template("inter.html", posts=posts, title=title)
-
-
-@main.route('/user/interview/<int:id>', methods=['GET', 'POST'])
-@login_required
-def displayinterview(id):
-    interview = Interview.query.get(id)
-    form = InterviewReviewForm()
-    if form.validate_on_submit():
-        review = form.review.data
-        new_interviewreview = ReviewInterview(
-            review=review, interview_id=id, user=current_user)
-        new_interviewreview.save_reviewinterview()
-
-    review = ReviewInterview.query.filter_by(interview_id=id).all()
-    return render_template('interviewpitch.html', interview=interview, review_form=form, review=review)
