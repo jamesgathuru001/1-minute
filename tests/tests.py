@@ -1,7 +1,6 @@
 from app.models import Pitch, User, Comment
 from app import db
 import unittest
-from app.models import User
 
 
 class UserModelTest(unittest.TestCase):
